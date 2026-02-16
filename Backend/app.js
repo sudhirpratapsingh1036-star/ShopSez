@@ -1,0 +1,39 @@
+import express from 'express'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import jsonwebtoken from 'jsonwebtoken'
+
+
+const app = express();
+
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true
+}))
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({extended: true}));
+app.use(express.static('public'));
+
+//routes import 
+import authRoutes from "./routes/auth.routes.js";
+import userRoutes from './routes/user.routes.js';
+import ownerRoutes from './routes/owner.routes.js';
+import productRoutes from './routes/product.routes.js'
+import cartRoutes from "./routes/cart.routes.js";
+import orderRoutes from "./routes/order.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
+import wishListRoutes from "./routes/wishList.routes.js";
+
+//routes declaration
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/owners", ownerRoutes);
+app.use("/api/v1/products", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/payment", paymentRoutes);
+app.use("/api/v1/wishlist", wishListRoutes);
+
+export {app};

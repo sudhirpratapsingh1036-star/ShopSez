@@ -1,0 +1,110 @@
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+export default function Login() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    role: "customer",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Trim email and password to avoid invisible space issues
+    const email = formData.email.trim();
+    const password = formData.password.trim();
+
+    console.log("Attempting login with:", {
+      role: formData.role,
+      email,
+      password,
+    });
+
+    const endpoint =
+      formData.role === "customer"
+        ? "http://localhost:8000/api/v1/auth/user/login"
+        : "http://localhost:8000/api/v1/auth/owner/login";
+
+    try {
+      const response = await axios.post(endpoint, { email, password });
+
+      console.log("Login response:", response.data);
+
+      if (response.data && response.data.data?.accessToken) {
+        localStorage.setItem("token", response.data.data.accessToken);
+        if (formData.role === "owner") {
+  navigate("/admin-dashboard");
+} else {
+  navigate("/");
+}
+
+      } else {
+        alert("Login failed: No access token received");
+      }
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
+
+      // Show backend error message if available
+      const message =
+        error.response?.data?.message || "Login failed. Check your credentials";
+      alert(message);
+    }
+  };
+
+  return (
+    <div className="w-screen min-h-screen bg-linear-to-br from-gray-900 via-slate-800 to-black flex items-center justify-center p-5">
+      <div className="bg-white rounded-xl shadow-xl p-10 w-full max-w-md">
+        <h2 className="text-2xl text-black font-bold text-center mb-6">
+          Login
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="Email"
+            className="w-full border-2 text-black border-gray-300 rounded-lg px-3 py-2"
+            required
+          />
+
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Password"
+            className="w-full border-2 text-black border-gray-300 rounded-lg px-3 py-2"
+            required
+          />
+
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="w-full border-2 text-black border-gray-300 rounded-lg px-3 py-2"
+          >
+            <option value="customer">Customer</option>
+            <option value="owner">Owner</option>
+          </select>
+
+          <button
+            type="submit"
+            className="w-full bg-red-600 text-white py-2 rounded-lg mt-2"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
