@@ -23,8 +23,8 @@ export default function SignUp() {
     // Determine correct backend endpoint based on role
     const endpoint =
       formData.role === "customer"
-        ? "http://localhost:8000/api/v1/auth/user/register"
-        : "http://localhost:8000/api/v1/auth/owner/register";
+        ? "/api/v1/auth/user/register"
+        : "/api/v1/auth/owner/register";
 
     try {
       const response = await axios.post(endpoint, {

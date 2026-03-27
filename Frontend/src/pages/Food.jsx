@@ -4,11 +4,11 @@ import axios from "axios";
 function Food() {
   const [products, setProducts] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://localhost:8000/api/v1/products") // fetch products from backend
-      .then(res => setProducts(res.data.data)) // notice "data.data"
-      .catch(err => console.error("Error fetching products:", err));
-  }, []);
+ useEffect(() => {
+  api.get("/api/v1/products")
+    .then(res => setProducts(res.data.data))
+    .catch(err => console.error("Error fetching products:", err));
+}, []);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -22,7 +22,11 @@ function Food() {
             <div key={item._id} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
               <div className="w-full h-32 bg-gray-200 flex items-center justify-center mb-2 rounded">
                 {item.images && item.images.length > 0 ? (
-                  <img src={`http://localhost:8000/${item.images[0]}`} alt={item.name} className="h-full object-contain" />
+                 <img 
+  src={`${import.meta.env.VITE_API_URL}/${item.images[0]}`} 
+  alt={item.name} 
+  className="h-full object-contain" 
+/>
                 ) : (
                   <span className="text-gray-500">No Image</span>
                 )}

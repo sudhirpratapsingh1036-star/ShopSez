@@ -6,7 +6,7 @@ const OwnerProducts = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await axios.get("http://localhost:8000/api/owner/products", {
+      const res = await api.get("/api/owner/products", {
         withCredentials: true
       });
       setProducts(res.data.data);

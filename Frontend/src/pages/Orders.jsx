@@ -9,9 +9,9 @@ export default function Orders() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/v1/orders", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+  const res = await api.get("/api/v1/orders", {
+  headers: { Authorization: `Bearer ${token}` },
+});
         setOrders(res.data.data || []);
         setLoading(false);
       } catch (err) {

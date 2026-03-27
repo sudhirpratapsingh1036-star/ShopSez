@@ -50,18 +50,18 @@ const Checkout = () => {
     );
 
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/orders",
-        {
-          shippingAddress,
-          paymentMethod: "COD",
-          items,
-          totalAmount,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await api.post(
+  "/api/v1/orders",
+  {
+    shippingAddress,
+    paymentMethod: "COD",
+    items,
+    totalAmount,
+  },
+  {
+    headers: { Authorization: `Bearer ${token}` },
+  }
+);
 
       if (res.data.success) {
         alert("Order placed successfully!");

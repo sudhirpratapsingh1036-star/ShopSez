@@ -27,7 +27,7 @@ export default function Products() {
   // --- Fetch products ---
   const fetchProducts = async (category = "") => {
     try {
-      let url = "http://localhost:8000/api/v1/products";
+      let url = "/api/v1/products";
       if (category) url += `?category=${category}`;
 
       const res = await axios.get(url);
@@ -56,8 +56,8 @@ export default function Products() {
     }
 
     try {
-      await axios.post(
-        "http://localhost:8000/api/v1/cart/add",
+      await api.post(
+        "/api/v1/cart/add",
         { productId: product._id, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -86,8 +86,8 @@ export default function Products() {
     }
 
     try {
-      await axios.post(
-        "http://localhost:8000/api/v1/wishlist/add",
+      await api.post(
+        "/api/v1/wishlist/add",
         { productId: product._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -120,8 +120,8 @@ export default function Products() {
 
 const placeOrderCOD = async () => {
   try {
-    const res = await axios.post(
-      "http://localhost:8000/api/v1/orders",
+    const res = await api.post(
+      "/api/v1/orders",
       {
         shippingAddress: {
           fullName: "Test User",

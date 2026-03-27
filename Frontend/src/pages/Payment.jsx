@@ -11,7 +11,7 @@ const Payment = () => {
     const fetchCart = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await axios.get("http://localhost:8000/api/v1/cart", {
+        const res = await api.get("/api/v1/cart", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setCartItems(res.data.data || []);

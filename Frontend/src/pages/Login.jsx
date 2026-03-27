@@ -30,9 +30,8 @@ export default function Login() {
 
     const endpoint =
       formData.role === "customer"
-        ? "http://localhost:8000/api/v1/auth/user/login"
-        : "http://localhost:8000/api/v1/auth/owner/login";
-
+  ? `${import.meta.env.VITE_API_URL}/api/v1/auth/user/login`
+: `${import.meta.env.VITE_API_URL}/api/v1/auth/owner/login`;
     try {
       const response = await axios.post(endpoint, { email, password });
 

@@ -24,9 +24,9 @@ export default function AdminDashboard() {
   // Fetch products from backend
   const fetchProducts = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/owners/products", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+     const res = await api.get("/api/v1/owners/products", {
+  headers: { Authorization: `Bearer ${token}` },
+});
       setProducts(res.data.data);
     } catch (err) {
       console.log("Error fetching products:", err);
@@ -73,17 +73,16 @@ export default function AdminDashboard() {
       formData.append("stock", Number(newProduct.stock));
       formData.append("image", newProduct.imageFile);
 
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/owners/products",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
+const res = await api.post(
+  "/api/v1/owners/products",
+  formData,
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  }
+);
       setProducts((prev) => [res.data.data, ...prev]);
 
       setNewProduct({
@@ -110,10 +109,9 @@ export default function AdminDashboard() {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/v1/owners/products/${productId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+     await api.delete(`/api/v1/owners/products/${productId}`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
       setProducts((prev) => prev.filter((p) => p._id !== productId));
       alert("Product deleted successfully ✅");
     } catch (err) {

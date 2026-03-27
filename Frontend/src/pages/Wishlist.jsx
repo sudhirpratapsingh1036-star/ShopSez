@@ -6,13 +6,13 @@ function Wishlist() {
 
   // Fetch wishlist items from backend
   useEffect(() => {
-    axios.get("http://localhost:8000/api/v1/wishlist", { withCredentials: true })
+    api.get("/api/v1/wishlist", { withCredentials: true })
       .then(res => setWishlistItems(res.data.data))
       .catch(err => console.error(err));
   }, []);
 
   const removeFromWishlist = (productId) => {
-    axios.delete(`http://localhost:8000/api/v1/wishlist/${productId}`, { withCredentials: true })
+    api.delete(`/api/v1/wishlist/${productId}`, { withCredentials: true })
       .then(res => {
         setWishlistItems(prev => prev.filter(item => item._id !== productId));
       })
@@ -31,7 +31,7 @@ function Wishlist() {
             <div key={item._id} className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center">
               <div className="w-full h-32 bg-gray-200 flex items-center justify-center mb-2 rounded">
                 {item.images && item.images.length > 0 ? (
-                  <img src={`http://localhost:8000/${item.images[0]}`} alt={item.name} className="h-full object-contain" />
+                  <img src={`${import.meta.env.VITE_API_URL}/${item.images[0]}`} alt={item.name} className="h-full object-contain" />
                 ) : (
                   <span className="text-gray-500">No Image</span>
                 )}
