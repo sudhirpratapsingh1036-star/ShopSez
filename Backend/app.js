@@ -6,16 +6,35 @@ import jsonwebtoken from 'jsonwebtoken'
 
 const app = express();
 
+// Improved CORS configuration
 app.use(cors({
-    origin: process.env.CORS_ORIGIN, // now uses the env variable
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            process.env.CORS_ORIGIN,
+            "http://localhost:5173",
+            "http://localhost:3000"
+        ].filter(Boolean);
+        
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true
+    credentials: true,
+    optionsSuccessStatus: 200
 }));
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'OK', message: 'Backend is running' });
+});
 
 //routes import 
 import authRoutes from "./routes/auth.routes.js";
