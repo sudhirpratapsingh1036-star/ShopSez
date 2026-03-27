@@ -21,6 +21,15 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if backend is running first
+    try {
+      await api.get("/health");
+    } catch (healthError) {
+      console.error("Backend health check failed:", healthError.message);
+      alert("Backend is not responding. Please try again in a moment.");
+      return;
+    }
+
     // Determine correct backend endpoint based on role
     const endpoint =
       formData.role === "customer"
@@ -38,9 +47,14 @@ export default function SignUp() {
       alert(`Signup successful for ${formData.email}`);
       navigate("/login"); // redirect after signup
     } catch (error) {
-      console.error(error);
+      console.error("Signup error:", error);
+      console.error("Error response:", error.response?.data);
+      console.error("Error status:", error.response?.status);
+      console.error("Error headers:", error.response?.headers);
+      
       alert(
         error.response?.data?.message ||
+          error.message ||
           "Signup failed. Make sure backend is running"
       );
     }
