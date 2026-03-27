@@ -23,7 +23,7 @@ export default function SignUp() {
 
     // Check if backend is running first
     try {
-      await api.get("/health");
+      await api.get("/api/health");
     } catch (healthError) {
       console.error("Backend health check failed:", healthError.message);
       alert("Backend is not responding. Please try again in a moment.");
