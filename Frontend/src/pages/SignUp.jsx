@@ -27,7 +27,7 @@ export default function SignUp() {
         : "/api/v1/auth/owner/register";
 
     try {
-      const response = await axios.post(endpoint, {
+      const response = await api.post(endpoint, {
         username: formData.username,
         email: formData.email,
         phoneNumber: formData.phone, // match backend
