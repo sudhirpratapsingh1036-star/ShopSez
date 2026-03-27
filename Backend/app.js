@@ -7,9 +7,10 @@ import jsonwebtoken from 'jsonwebtoken'
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN, // now uses the env variable
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
-}))
+}));
 
 app.use(express.json());
 app.use(cookieParser());
