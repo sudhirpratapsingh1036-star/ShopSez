@@ -22,14 +22,7 @@ export default function SignUp() {
     e.preventDefault();
 
     // Check if backend is running first
-    try {
-      await api.get("/../health");
-    } catch (healthError) {
-      console.error("Backend health check failed:", healthError.message);
-      alert("Backend is not responding. Please try again in a moment.");
-      return;
-    }
-
+  
     // Determine correct backend endpoint based on role
     const endpoint =
   formData.role === "customer"
