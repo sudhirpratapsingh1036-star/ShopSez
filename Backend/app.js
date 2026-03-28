@@ -8,22 +8,8 @@ const app = express();
 
 // Improved CORS configuration
 app.use(cors({
-    origin: (origin, callback) => {
-        const allowedOrigins = [
-            process.env.CORS_ORIGIN,
-            "http://localhost:5173",
-            "http://localhost:3000"
-        ].filter(Boolean);
-        
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-    optionsSuccessStatus: 200
+  origin: "https://shop-sez.vercel.app",
+  credentials: true
 }));
 
 app.use(express.json());

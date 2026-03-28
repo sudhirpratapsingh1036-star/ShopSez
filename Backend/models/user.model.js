@@ -3,31 +3,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    phoneNumber: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        enum: ["admin", "customer"],
-        default: "customer"
-    }
-},
-{
-    timestamps: true
-});
+    username: { type: String, required: true },
+    fullName: { type: String }, // optional
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    phoneNumber: { type: String, required: true },
+    role: { type: String, enum: ["admin", "customer"], default: "customer" }
+}, { timestamps: true });
 
 // ---- FIXED PRE SAVE HOOK ----
 userSchema.pre("save", async function () {
