@@ -24,10 +24,10 @@ export default function SignUp() {
     // Check if backend is running first
   
     // Determine correct backend endpoint based on role
-    const endpoint =
+  const endpoint =
   formData.role === "customer"
-    ? "/auth/register"
-    : "/owners/register";
+    ? "/auth/user/register"
+    : "/auth/owner/register";
 
     try {
       const response = await api.post(endpoint, {
