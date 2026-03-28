@@ -23,7 +23,7 @@ export default function SignUp() {
 
     // Check if backend is running first
     try {
-      await api.get("/api/health");
+      await api.get("/../health");
     } catch (healthError) {
       console.error("Backend health check failed:", healthError.message);
       alert("Backend is not responding. Please try again in a moment.");
@@ -32,9 +32,9 @@ export default function SignUp() {
 
     // Determine correct backend endpoint based on role
     const endpoint =
-      formData.role === "customer"
-        ? "/api/v1/auth/user/register"
-        : "/api/v1/auth/owner/register";
+  formData.role === "customer"
+    ? "/auth/register"
+    : "/owners/register";
 
     try {
       const response = await api.post(endpoint, {
