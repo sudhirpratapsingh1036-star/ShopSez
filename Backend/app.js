@@ -8,7 +8,11 @@ const app = express();
 
 // Improved CORS configuration
 app.use(cors({
-  origin: "https://shop-sez.vercel.app",
+  origin: [
+    "https://shop-sez.vercel.app",
+    "http://localhost:5173",
+    /https:\/\/shop-.*\.vercel\.app/   // ✅ allow all preview deployments
+  ],
   credentials: true
 }));
 
