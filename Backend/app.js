@@ -7,14 +7,23 @@ import jsonwebtoken from 'jsonwebtoken'
 const app = express();
 
 // Improved CORS configuration
-app.use(cors({
-  origin: [
-    "https://shop-sez.vercel.app",
-    "http://localhost:5173",
-    /https:\/\/shop-.*\.vercel\.app/   // ✅ allow all preview deployments
-  ],
-  credentials: true
-}));
+// app.use(cors({
+//   origin: [
+//     "https://shop-sez.vercel.app",
+//     "http://localhost:5173",
+//     /https:\/\/shop-.*\.vercel\.app/   // ✅ allow all preview deployments
+//   ],
+//   credentials: true
+// }));
+app.use(
+  cors({
+    origin: [
+      "https://shop-5lyusih28-sudhir-prataps-projects.vercel.app",
+      "https://shop-sez-git-main-sudhir-prataps-projects.vercel.app"
+    ],
+    credentials: true
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());

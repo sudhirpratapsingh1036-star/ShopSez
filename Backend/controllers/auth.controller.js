@@ -64,12 +64,11 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-  };
-
+ const cookieOptions = {
+  httpOnly: true,
+  secure: true,       // must be true on HTTPS (Render + Vercel)
+  sameSite: "none",   // 🔥 required for cross-origin
+};
   res
     .status(200)
     .cookie("accessToken", accessToken, cookieOptions)
