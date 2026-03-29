@@ -24,10 +24,13 @@ export default function Login() {
 
   console.log("Attempting login with:", { role: formData.role, email, password });
 
-  const endpoint = formData.role === "customer" ? "/auth/user/login" : "/auth/owner/login";
+ 
 
   try {
-    const response = await api.post(endpoint, { email, password });
+const response = await api.post(
+  formData.role === "customer" ? "/auth/user/login" : "/auth/owner/login",
+  { email, password }
+);
 
     console.log("Login response:", response.data);
 
