@@ -28,12 +28,15 @@ export default function Login() {
       password,
     });
 
-    const endpoint =
-      formData.role === "customer"
-  ? `${import.meta.env.VITE_API_URL}/api/v1/auth/user/login`
-: `${import.meta.env.VITE_API_URL}/api/v1/auth/owner/login`;
+const endpoint =
+  formData.role === "customer"
+    ? `${import.meta.env.VITE_API_URL}/auth/user/login`
+    : `${import.meta.env.VITE_API_URL}/auth/owner/login`;
     try {
-      const response = await axios.post(endpoint, { email, password });
+      const response = await api.post(
+  formData.role === "customer" ? "/auth/user/login" : "/auth/owner/login",
+  { email, password }
+);
 
       console.log("Login response:", response.data);
 
