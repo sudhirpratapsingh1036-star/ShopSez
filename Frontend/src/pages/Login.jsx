@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import api from "../Api.js";
+
+// Create API client directly here
+const apiClient = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
+console.log("✅ API Client created with baseURL:", apiClient.defaults.baseURL);
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,13 +30,12 @@ export default function Login() {
     const password = formData.password.trim();
 
     console.log("Attempting login with:", { role: formData.role, email, password });
-    console.log("API URL:", import.meta.env.VITE_API_URL);
 
     try {
       const endpoint = formData.role === "customer" ? "/auth/user/login" : "/auth/owner/login";
-      console.log("Making request to:", `${import.meta.env.VITE_API_URL}${endpoint}`);
+      console.log("Making POST request to:", apiClient.defaults.baseURL + endpoint);
       
-      const response = await api.post(endpoint, { email, password });
+      const response = await apiClient.post(endpoint, { email, password });
 
       console.log("Login response:", response.data);
 
@@ -40,7 +46,9 @@ export default function Login() {
         alert("Login failed: No access token received");
       }
     } catch (error) {
-      console.error("Login error:", error.response?.data || error.message);
+      console.error("Login error details:", error);
+      console.error("Response data:", error.response?.data);
+      console.error("Response status:", error.response?.status);
       alert(error.response?.data?.message || "Login failed. Check your credentials");
     }
   };

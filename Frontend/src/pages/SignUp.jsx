@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import api from "../Api.js";
+
+// Create API client directly here
+const apiClient = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
+console.log("✅ SignUp API Client created with baseURL:", apiClient.defaults.baseURL);
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -21,16 +28,15 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if backend is running first
-  
-    // Determine correct backend endpoint based on role
-  const endpoint =
-  formData.role === "customer"
-    ? "/auth/user/register"
-    : "/auth/owner/register";
+    const endpoint =
+      formData.role === "customer"
+        ? "/auth/user/register"
+        : "/auth/owner/register";
 
     try {
-      const response = await api.post(endpoint, {
+      console.log("Making POST request to:", apiClient.defaults.baseURL + endpoint);
+      
+      const response = await apiClient.post(endpoint, {
         username: formData.username,
         email: formData.email,
         phoneNumber: formData.phone, // match backend
@@ -40,10 +46,9 @@ export default function SignUp() {
       alert(`Signup successful for ${formData.email}`);
       navigate("/login"); // redirect after signup
     } catch (error) {
-      console.error("Signup error:", error);
+      console.error("Signup error details:", error);
       console.error("Error response:", error.response?.data);
       console.error("Error status:", error.response?.status);
-      console.error("Error headers:", error.response?.headers);
       
       alert(
         error.response?.data?.message ||
