@@ -33,18 +33,27 @@ export const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
 
-  const user = await User.create({
-    username,
-    email,
-    password,
-    phoneNumber,
-  });
+  try {
+    const user = await User.create({
+      username,
+      email,
+      password,
+      phoneNumber,
+    });
 
-  const safeUser = await User.findById(user._id).select("-password -refreshToken");
+    const safeUser = await User.findById(user._id).select("-password -refreshToken");
 
-  res.status(201).json(
-    new ApiResponse(201, safeUser, "User registered successfully")
-  );
+    res.status(201).json(
+      new ApiResponse(201, safeUser, "User registered successfully")
+    );
+  } catch (error) {
+    // Handle MongoDB E11000 duplicate key error
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      throw new ApiError(409, `${field} already exists`);
+    }
+    throw error;
+  }
 });
 
 export const loginUser = asyncHandler(async (req, res) => {
@@ -142,6 +151,10 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
 export const registerOwner = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
+  if ([username, email, password].some(f => !f?.trim())) {
+    throw new ApiError(400, "All fields are required");
+  }
+
   if (email !== process.env.OWNER_EMAIL) {
     throw new ApiError(403, "Not allowed to register as owner");
   }
@@ -151,11 +164,20 @@ export const registerOwner = asyncHandler(async (req, res) => {
     throw new ApiError(409, "Owner already exists");
   }
 
-  await Owner.create({ username, email, password });
+  try {
+    await Owner.create({ username, email, password });
 
-  res.status(201).json(
-    new ApiResponse(201, {}, "Owner registered successfully")
-  );
+    res.status(201).json(
+      new ApiResponse(201, {}, "Owner registered successfully")
+    );
+  } catch (error) {
+    // Handle MongoDB E11000 duplicate key error
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      throw new ApiError(409, `${field} already exists`);
+    }
+    throw error;
+  }
 });
 
 export const loginOwner = asyncHandler(async (req, res) => {
