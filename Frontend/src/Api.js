@@ -1,9 +1,9 @@
 import axios from "axios";
 
+// Use environment variable if available, otherwise hardcode for production
 const apiBaseUrl = import.meta.env.VITE_API_URL || "https://shopsez.onrender.com/api/v1";
 
 console.log("🔌 API Base URL:", apiBaseUrl);
-console.log("🔌 Environment VITE_API_URL:", import.meta.env.VITE_API_URL);
 
 const api = axios.create({
   baseURL: apiBaseUrl,
