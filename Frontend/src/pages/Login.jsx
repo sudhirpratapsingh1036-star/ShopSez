@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import api from "../Api";
+import api from "../Api.js";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -16,35 +16,34 @@ export default function Login() {
     setFormData({ ...formData, [name]: value });
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const email = formData.email.trim();
-  const password = formData.password.trim();
+    const email = formData.email.trim();
+    const password = formData.password.trim();
 
-  console.log("Attempting login with:", { role: formData.role, email, password });
+    console.log("Attempting login with:", { role: formData.role, email, password });
+    console.log("API URL:", import.meta.env.VITE_API_URL);
 
- 
+    try {
+      const endpoint = formData.role === "customer" ? "/auth/user/login" : "/auth/owner/login";
+      console.log("Making request to:", `${import.meta.env.VITE_API_URL}${endpoint}`);
+      
+      const response = await api.post(endpoint, { email, password });
 
-  try {
-const response = await api.post(
-  formData.role === "customer" ? "/auth/user/login" : "/auth/owner/login",
-  { email, password }
-);
+      console.log("Login response:", response.data);
 
-    console.log("Login response:", response.data);
-
-    if (response.data?.data?.accessToken) {
-      localStorage.setItem("token", response.data.data.accessToken);
-      formData.role === "owner" ? navigate("/admin-dashboard") : navigate("/");
-    } else {
-      alert("Login failed: No access token received");
+      if (response.data?.data?.accessToken) {
+        localStorage.setItem("token", response.data.data.accessToken);
+        formData.role === "owner" ? navigate("/admin-dashboard") : navigate("/");
+      } else {
+        alert("Login failed: No access token received");
+      }
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
+      alert(error.response?.data?.message || "Login failed. Check your credentials");
     }
-  } catch (error) {
-    console.error("Login error:", error.response?.data || error.message);
-    alert(error.response?.data?.message || "Login failed. Check your credentials");
-  }
-};
+  };
 
   return (
     <div className="w-screen min-h-screen bg-linear-to-br from-gray-900 via-slate-800 to-black flex items-center justify-center p-5">
