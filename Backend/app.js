@@ -19,7 +19,8 @@ app.use(
   cors({
     origin: [
       "https://shop-5lyusih28-sudhir-prataps-projects.vercel.app",
-      "https://shop-sez-git-main-sudhir-prataps-projects.vercel.app"
+      "https://shop-sez-git-main-sudhir-prataps-projects.vercel.app",
+      "https://shop-ge9stk5oc-sudhir-prataps-projects.vercel.app"
     ],
     credentials: true
   })
