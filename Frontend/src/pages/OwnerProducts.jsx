@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const api = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
 const OwnerProducts = () => {
   const [products, setProducts] = useState([]);
 

@@ -3,6 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AuthContext } from "../context/AuthContext";
+
+const api = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
 // import { addItem as addCartItem } from "../redux/cartSlice";
 // import { addItem as addWishlistItem } from "../redux/wishlistSlice";
 import { addItem as addCartItem, increaseQty, decreaseQty, removeItem  } from "../redux/cartSlice";

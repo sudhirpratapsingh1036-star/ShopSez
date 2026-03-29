@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const api = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
 function Food() {
   const [products, setProducts] = useState([]);
 

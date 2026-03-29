@@ -2,6 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 
+const api = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
 export default function OrderTracking() {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);

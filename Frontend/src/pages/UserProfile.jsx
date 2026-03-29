@@ -3,6 +3,11 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+const api = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
 const UserProfile = () => {
   const { token, setUser, setToken } = useContext(AuthContext);
   const navigate = useNavigate();

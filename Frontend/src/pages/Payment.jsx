@@ -2,6 +2,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const api = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
 const Payment = () => {
   const [cartItems, setCartItems] = useState([]);
   const [loading, setLoading] = useState(false);

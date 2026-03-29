@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { useSelector } from "react-redux";
 
+const api = axios.create({
+  baseURL: "https://shopsez.onrender.com/api/v1",
+  withCredentials: true,
+});
+
 const Checkout = () => {
   const token = localStorage.getItem("token");
 
