@@ -100,24 +100,47 @@ export const updateOwnerProfile = asyncHandler(async (req, res) => {
 //   }
 // };
 export const createProduct = asyncHandler(async (req, res) => {
+  console.log("🔍 createProduct called");
+  console.log("📦 Body:", req.body);
+  console.log("📄 File:", req.file);
+  console.log("👤 Owner ID:", req.owner?._id);
+
   const { name, price, category, description, stock } = req.body;
 
-  if (!req.file) throw new ApiError(400, "Product image is required");
+  // Validate required fields
+  if (!name || !price || !category || !description || stock === undefined) {
+    console.error("❌ Missing required fields");
+    throw new ApiError(400, "All fields (name, price, category, description, stock) are required");
+  }
 
+  if (!req.file) {
+    console.error("❌ No file uploaded");
+    throw new ApiError(400, "Product image is required");
+  }
+
+  console.log("📤 Uploading to Cloudinary...");
   // Upload to Cloudinary
   const uploadedImage = await uploadOnCloudinary(req.file.path);
-  if (!uploadedImage) throw new ApiError(500, "Failed to upload image");
+  
+  if (!uploadedImage) {
+    console.error("❌ Cloudinary upload failed");
+    throw new ApiError(500, "Failed to upload image to Cloudinary");
+  }
+
+  console.log("✅ Image uploaded:", uploadedImage.secure_url);
 
   const product = await Product.create({
     ownerId: req.owner._id,  // ownerId from JWT
     name,
-    price,
+    price: Number(price),
     category,
     description,
-    stock,
+    stock: Number(stock),
     images: [uploadedImage.secure_url],
-    isDeleted: false // save URL in DB
+    isDeleted: false
   });
+
+  console.log("✅ Product created:", product._id);
 
   res.status(201).json(new ApiResponse(201, product, "Product created successfully"));
 });

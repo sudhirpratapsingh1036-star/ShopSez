@@ -23,7 +23,7 @@ router.use(verifyOwnerJWT);
 router.get("/profile", getOwnerProfile);
 router.patch("/profile", updateOwnerProfile);
 
-router.post("/products",verifyOwnerJWT, upload.single("image"), createProduct);
+router.post("/products", upload.single("image"), createProduct);
 router.patch("/products/:productId", updateProduct);
 router.delete("/products/:productId", deleteProduct);
 
@@ -35,6 +35,6 @@ router.get("/orders", getOwnerOrders);
 router.patch("/orders/:orderId/status", updateOrderStatus);
 
 router.get("/dashboard", getDashboardStats);
-router.get("/products",verifyOwnerJWT,getOwnerProducts)
+router.get("/products", getOwnerProducts)
 
 export default router;
