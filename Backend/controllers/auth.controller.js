@@ -188,29 +188,45 @@ await Owner.create({
 });
 
 export const loginOwner = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  
-  if ([email, password].some(f => !f?.trim())) {
+  let { email, password } = req.body;
+
+  // 🔧 Trim & normalize
+  email = email?.trim().toLowerCase();
+  password = password?.trim();
+
+  if (!email || !password) {
     throw new ApiError(400, "All fields are required");
   }
-  
+
+  // 🔍 Find owner
   const owner = await Owner.findOne({ email });
-  if (!owner) throw new ApiError(401, "Invalid email or password");
-  // console.log("Login Email:", email);
-  // console.log("Owner found:", owner);
+  if (!owner) {
+    console.log("❌ Owner not found for email:", email);
+    throw new ApiError(401, "Invalid email or password");
+  }
 
+  // 🔍 Debug (VERY IMPORTANT - remove later)
+  console.log("✅ Owner found:", owner.email);
+  console.log("🔐 Stored password:", owner.password);
+
+  // 🔑 Compare password
   const isValid = await owner.isPasswordCorrect(password);
-  if (!isValid) throw new ApiError(401, "Invalid email or password");
+  console.log("🔑 Password match:", isValid);
 
+  if (!isValid) {
+    throw new ApiError(401, "Invalid email or password");
+  }
+
+  // 🎟 Generate tokens
   const { accessToken, refreshToken } = await generateTokens(Owner, owner._id);
 
   const loggedInOwner = await Owner.findById(owner._id).select("-password -refreshToken");
 
+  // 🍪 Cookie config (FIXED)
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "none",
-secure: true
+    secure: true,       // REQUIRED for Render (HTTPS)
+    sameSite: "none",   // REQUIRED for cross-origin (Vercel)
   };
 
   res
@@ -225,7 +241,6 @@ secure: true
       )
     );
 });
-
 export const logoutOwner = asyncHandler(async (req, res) => {
   await Owner.findByIdAndUpdate(req.owner._id, {
     $unset: { refreshToken: 1 },
