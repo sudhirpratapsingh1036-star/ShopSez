@@ -7,19 +7,26 @@ import jsonwebtoken from 'jsonwebtoken'
 const app = express();
 
 // Improved CORS configuration
+const allowedOrigins = [
+  "https://shop-sez.vercel.app",
+  "http://localhost:5173"
+];
+
 app.use(
   cors({
-    origin: [
-      "https://shop-sez.vercel.app",
-      "https://shop-5lyusih28-sudhir-prataps-projects.vercel.app",
-      "https://shop-sez-git-main-sudhir-prataps-projects.vercel.app",
-      "https://shop-ge9stk5oc-sudhir-prataps-projects.vercel.app",
-      "http://localhost:5173"  // Allow local development
-    ],
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true
   })
 );
-
 
 app.use(express.json());
 app.use(cookieParser());
