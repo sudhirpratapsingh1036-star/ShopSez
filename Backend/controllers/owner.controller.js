@@ -289,7 +289,9 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   );
 });
 export const getOwnerProducts = asyncHandler(async (req, res) => {
+  console.log("Owner ID:", req.owner._id);
   const products = await Product.find({ ownerId: req.owner._id });
+  console.log("Products found:", products.length);
 
   res.status(200).json(
     new ApiResponse(200, products, "Owner products fetched successfully")

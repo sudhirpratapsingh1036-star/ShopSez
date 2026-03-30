@@ -11,7 +11,7 @@ const OwnerProducts = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await api.get("/api/owner/products", {
+      const res = await api.get("/owners/products", {
         withCredentials: true
       });
       setProducts(res.data.data);
