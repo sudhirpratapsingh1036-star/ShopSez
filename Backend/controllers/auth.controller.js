@@ -4,6 +4,7 @@ import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 
 const generateTokens = async (Model, id) => {
@@ -165,7 +166,13 @@ export const registerOwner = asyncHandler(async (req, res) => {
   }
 
   try {
-    await Owner.create({ username, email, password });
+   const hashedPassword = await bcrypt.hash(password, 10);
+
+await Owner.create({
+  username,
+  email,
+  password: hashedPassword,
+});
 
     res.status(201).json(
       new ApiResponse(201, {}, "Owner registered successfully")
@@ -202,7 +209,8 @@ export const loginOwner = asyncHandler(async (req, res) => {
   const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    sameSite: "none",
+secure: true
   };
 
   res
