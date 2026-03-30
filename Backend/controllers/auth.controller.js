@@ -192,26 +192,31 @@ export const loginOwner = asyncHandler(async (req, res) => {
   email = email?.trim().toLowerCase();
   password = password?.trim();
 
+  console.log("🔑 Owner login attempt - Email:", email);
+
   if (!email || !password) {
     throw new ApiError(400, "All fields are required");
   }
 
   // 🔍 Find owner
   const owner = await Owner.findOne({ email });
+  console.log("🔑 Owner login - Owner found:", !!owner);
+  
   if (!owner) {
-    console.log("❌ Owner not found for email:", email);
+    console.log("❌ Owner login - No owner with email:", email);
     throw new ApiError(401, "Invalid email or password");
   }
 
   // 🔍 Debug (VERY IMPORTANT - remove later)
   console.log("✅ Owner found:", owner.email);
-  console.log("🔐 Stored password:", owner.password);
+  console.log("🔐 Stored password hash exists:", !!owner.password);
 
   // 🔑 Compare password
   const isValid = await owner.isPasswordCorrect(password);
   console.log("🔑 Password match:", isValid);
 
   if (!isValid) {
+    console.log("❌ Owner login - Password incorrect for:", email);
     throw new ApiError(401, "Invalid email or password");
   }
 
@@ -226,6 +231,8 @@ export const loginOwner = asyncHandler(async (req, res) => {
     secure: true,       // REQUIRED for Render (HTTPS)
     sameSite: "none",   // REQUIRED for cross-origin (Vercel)
   };
+
+  console.log("✅ Owner login successful for:", email);
 
   res
     .status(200)
