@@ -35,7 +35,7 @@ export default function Products() {
       let url = "/products";  // ✅ Correct URL (baseURL is already set)
       if (category) url += `?category=${category}`;
 
-      const res = await axios.get(url);
+      const res = await api.get(url);  // ✅ Use api client with baseURL
       const fetchedProducts = res.data.data.products;
       setProducts(fetchedProducts);
 

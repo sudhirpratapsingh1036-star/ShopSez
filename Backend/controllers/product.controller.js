@@ -42,6 +42,14 @@ export const getAllProducts = asyncHandler(async (req, res) => {
 
   console.log("🔍 Query:", query);
   
+  // Debug: Check total products in DB
+  const allProducts = await Product.find({});
+  console.log("📊 Total products in DB:", allProducts.length);
+  const deletedProducts = await Product.find({ isDeleted: true });
+  console.log("🗑️ Deleted products:", deletedProducts.length);
+  const activeProducts = await Product.find({ isDeleted: { $ne: true } });
+  console.log("✅ Active products:", activeProducts.length);
+  
   const products = await Product.find(query)
     .sort(sort)
     .skip((page - 1) * limit)
