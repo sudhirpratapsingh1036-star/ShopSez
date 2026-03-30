@@ -40,12 +40,19 @@ export const getAllProducts = asyncHandler(async (req, res) => {
     query.category = category;
   }
 
+  console.log("🔍 Query:", query);
+  
   const products = await Product.find(query)
     .sort(sort)
     .skip((page - 1) * limit)
     .limit(Number(limit));
 
   const totalProducts = await Product.countDocuments(query);
+  
+  console.log("📦 Products found:", products.length, "Total:", totalProducts);
+  if (products.length > 0) {
+    console.log("🖼️ First product images:", products[0].images);
+  }
 
   res.status(200).json(
     new ApiResponse(

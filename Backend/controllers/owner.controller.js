@@ -122,25 +122,34 @@ export const createProduct = asyncHandler(async (req, res) => {
   // Upload to Cloudinary
   const uploadedImage = await uploadOnCloudinary(req.file.path);
   
+  console.log("🔍 uploadedImage object:", uploadedImage);
+
   if (!uploadedImage) {
-    console.error("❌ Cloudinary upload failed");
+    console.error("❌ Cloudinary upload failed - returned null");
     throw new ApiError(500, "Failed to upload image to Cloudinary");
   }
 
-  console.log("✅ Image uploaded:", uploadedImage.secure_url);
+  const imageUrl = uploadedImage.secure_url || uploadedImage.url;
+  console.log("✅ Image URL:", imageUrl);
+
+  if (!imageUrl) {
+    console.error("❌ No image URL in Cloudinary response");
+    throw new ApiError(500, "No image URL returned from Cloudinary");
+  }
 
   const product = await Product.create({
-    ownerId: req.owner._id,  // ownerId from JWT
+    ownerId: req.owner._id,
     name,
     price: Number(price),
     category,
     description,
     stock: Number(stock),
-    images: [uploadedImage.secure_url],
+    images: [imageUrl],
     isDeleted: false
   });
 
   console.log("✅ Product created:", product._id);
+  console.log("📸 Product images saved:", product.images);
 
   res.status(201).json(new ApiResponse(201, product, "Product created successfully"));
 });
@@ -312,9 +321,13 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   );
 });
 export const getOwnerProducts = asyncHandler(async (req, res) => {
-  console.log("Owner ID:", req.owner._id);
-  const products = await Product.find({ ownerId: req.owner._id });
-  console.log("Products found:", products.length);
+  console.log("👤 Owner ID:", req.owner._id);
+  const products = await Product.find({ ownerId: req.owner._id, isDeleted: false });
+  console.log("📦 Products found:", products.length);
+  
+  if (products.length > 0) {
+    console.log("🖼️ First product images:", products[0].images);
+  }
 
   res.status(200).json(
     new ApiResponse(200, products, "Owner products fetched successfully")

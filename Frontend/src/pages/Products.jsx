@@ -32,7 +32,7 @@ export default function Products() {
   // --- Fetch products ---
   const fetchProducts = async (category = "") => {
     try {
-      let url = "/api/v1/products";
+      let url = "/products";  // ✅ Correct URL (baseURL is already set)
       if (category) url += `?category=${category}`;
 
       const res = await axios.get(url);
@@ -62,7 +62,7 @@ export default function Products() {
 
     try {
       await api.post(
-        "/api/v1/cart/add",
+        "/cart/add",
         { productId: product._id, quantity: 1 },
         { headers: { Authorization: `Bearer ${token}` } }
       );
