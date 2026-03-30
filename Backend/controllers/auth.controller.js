@@ -166,13 +166,11 @@ export const registerOwner = asyncHandler(async (req, res) => {
   }
 
   try {
-   const hashedPassword = await bcrypt.hash(password, 10);
-
-await Owner.create({
-  username,
-  email,
-  password: hashedPassword,
-});
+    const owner = await Owner.create({
+      username,
+      email,
+      password,
+    });
 
     res.status(201).json(
       new ApiResponse(201, {}, "Owner registered successfully")
