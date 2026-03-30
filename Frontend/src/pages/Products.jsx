@@ -35,8 +35,13 @@ export default function Products() {
       let url = "/products";  // ✅ Correct URL (baseURL is already set)
       if (category) url += `?category=${category}`;
 
+      console.log("🔍 Fetching products from:", url);
       const res = await api.get(url);  // ✅ Use api client with baseURL
+      console.log("📦 API Response:", res.data);
+      
       const fetchedProducts = res.data.data.products;
+      console.log("🛍️ Products received:", fetchedProducts.length);
+      
       setProducts(fetchedProducts);
 
       const uniqueCategories = [
@@ -44,7 +49,8 @@ export default function Products() {
       ].sort();
       setCategories(uniqueCategories);
     } catch (err) {
-      console.error("Error fetching products:", err);
+      console.error("❌ Error fetching products:", err);
+      console.error("❌ Response:", err.response?.data);
     }
   };
 
@@ -92,7 +98,7 @@ export default function Products() {
 
     try {
       await api.post(
-        "/api/v1/wishlist/add",
+        "/wishlist/add",
         { productId: product._id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -126,7 +132,7 @@ export default function Products() {
 const placeOrderCOD = async () => {
   try {
     const res = await api.post(
-      "/api/v1/orders",
+      "/orders",
       {
         shippingAddress: {
           fullName: "Test User",
