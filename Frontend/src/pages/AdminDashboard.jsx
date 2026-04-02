@@ -114,9 +114,9 @@ const res = await api.post(
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-     await api.delete(`/api/v1/owners/products/${productId}`, {
-  headers: { Authorization: `Bearer ${token}` },
-});
+      await api.delete(`/owners/products/${productId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setProducts((prev) => prev.filter((p) => p._id !== productId));
       alert("Product deleted successfully ✅");
     } catch (err) {

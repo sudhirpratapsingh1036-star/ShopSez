@@ -10,8 +10,8 @@ function Food() {
   const [products, setProducts] = useState([]);
 
  useEffect(() => {
-  api.get("/api/v1/products")
-    .then(res => setProducts(res.data.data))
+  api.get("/products")
+    .then(res => setProducts(res.data.data.products || res.data.data))
     .catch(err => console.error("Error fetching products:", err));
 }, []);
 
@@ -28,7 +28,7 @@ function Food() {
               <div className="w-full h-32 bg-gray-200 flex items-center justify-center mb-2 rounded">
                 {item.images && item.images.length > 0 ? (
                  <img 
-  src={`${import.meta.env.VITE_API_URL}/${item.images[0]}`} 
+  src={item.images[0].startsWith("http") ? item.images[0] : `${import.meta.env.VITE_API_URL}/${item.images[0]}`} 
   alt={item.name} 
   className="h-full object-contain" 
 />
