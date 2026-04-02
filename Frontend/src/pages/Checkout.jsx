@@ -56,17 +56,17 @@ const Checkout = () => {
 
     try {
       const res = await api.post(
-  "/api/v1/orders",
-  {
-    shippingAddress,
-    paymentMethod: "COD",
-    items,
-    totalAmount,
-  },
-  {
-    headers: { Authorization: `Bearer ${token}` },
-  }
-);
+        "/orders",
+        {
+          shippingAddress,
+          paymentMethod: "COD",
+          items,
+          totalAmount,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (res.data.success) {
         alert("Order placed successfully!");
