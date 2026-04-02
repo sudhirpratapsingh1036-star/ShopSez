@@ -17,10 +17,10 @@ export default function OrderTracking() {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-       const res = await api.get(`/api/v1/orders/${orderId}`, {
-  headers: { Authorization: `Bearer ${token}` },
-});
-        setOrder(res.data.data);
+        const res = await api.get(`/orders/${orderId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setOrder(res.data.data || res.data);
         setLoading(false);
       } catch (err) {
         console.error(err);

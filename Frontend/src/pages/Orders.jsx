@@ -14,10 +14,10 @@ export default function Orders() {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-  const res = await api.get("/api/v1/orders", {
-  headers: { Authorization: `Bearer ${token}` },
-});
-        setOrders(res.data.data || []);
+        const res = await api.get("/my-orders", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setOrders(res.data.data || res.data || []);
         setLoading(false);
       } catch (err) {
         console.error(err);
