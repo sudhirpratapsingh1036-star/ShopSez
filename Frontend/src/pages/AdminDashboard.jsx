@@ -29,9 +29,9 @@ export default function AdminDashboard() {
   // Fetch products from backend
   const fetchProducts = async () => {
     try {
-     const res = await api.get("/api/v1/owners/products", {
-  headers: { Authorization: `Bearer ${token}` },
-});
+      const res = await api.get("/owners/products", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setProducts(res.data.data);
     } catch (err) {
       console.log("Error fetching products:", err);
@@ -79,7 +79,7 @@ export default function AdminDashboard() {
       formData.append("image", newProduct.imageFile);
 
 const res = await api.post(
-  "/api/v1/owners/products",
+  "/owners/products",
   formData,
   {
     headers: {
